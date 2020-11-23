@@ -1,10 +1,12 @@
 mod commands;
 
 use std::{
-    collections::HashSet,
     env,
+    collections::HashSet,
     sync::Arc,
 };
+
+use dotenv::dotenv;
 
 use serenity::{
     async_trait,
@@ -52,8 +54,10 @@ struct General;
 
 #[tokio::main]
 async fn main() {
+    dotenv()
+        .expect(".env file missing!");
     let token = env::var("DISCORD_TOKEN")
-        .expect("Expected a token in the environment");
+        .expect("Expected DISCORD_TOKEN in the environment");
 
 
     let http = Http::new_with_token(&token);
