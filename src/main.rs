@@ -11,7 +11,7 @@ use dotenv::dotenv;
 use serenity::{
     async_trait,
     client::bridge::gateway::ShardManager,
-    model::{event::ResumedEvent, gateway::Ready},
+    model::{event::ResumedEvent, gateway::{Ready, Activity}, user::OnlineStatus},
     http::Http,
     framework::{
         StandardFramework,
@@ -38,7 +38,8 @@ struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
-    async fn ready(&self, _: Context, ready: Ready) {
+    async fn ready(&self, ctx: Context, ready: Ready) {
+        ctx.set_presence(Some(Activity::playing("pls.give help")), OnlineStatus::Online).await;
         println!("Connected as {}", ready.user.name);
     }
 
