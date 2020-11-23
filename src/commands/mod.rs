@@ -1,2 +1,3 @@
-pub mod ping;
-pub mod owner;
+pub mod misc;
+pub mod help;
+pub mod admin;

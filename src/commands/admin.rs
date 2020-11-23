@@ -7,7 +7,7 @@ use serenity::framework::standard::{
 };
 
 #[command]
-#[owners_only]
+#[description = "Shutdown the bot"]
 async fn quit(ctx: &Context, msg: &Message) -> CommandResult {
     let data = ctx.data.read().await;
 

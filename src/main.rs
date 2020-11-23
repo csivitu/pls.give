@@ -21,8 +21,9 @@ use serenity::{
 };
 
 use commands::{
-    ping::*,
-    owner::*,
+    misc::*,
+    admin::*,
+    help::*,
 };
 
 
@@ -46,10 +47,17 @@ impl EventHandler for Handler {
     }
 }
 
+#[group]
+#[owners_only]
+#[prefix = "admin"]
+#[description = "Administration commands which only bot owners are allowed to use"]
+#[commands(quit)]
+struct Admin;
 
 #[group]
-#[commands(ping, quit)]
-struct General;
+#[description = "Miscelenaous commands"]
+#[commands(ping)]
+struct Misc;
 
 
 #[tokio::main]
@@ -76,7 +84,9 @@ async fn main() {
         .configure(|c| c
                    .owners(owners)
                    .prefix("pls.give "))
-        .group(&GENERAL_GROUP);
+        .help(&HELP)
+        .group(&ADMIN_GROUP)
+        .group(&MISC_GROUP);
 
     let mut client = Client::builder(&token)
         .framework(framework)
