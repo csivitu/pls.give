@@ -16,6 +16,7 @@ async fn get_link(link: String) -> Result<String> {
 
 #[command]
 #[description = "URL shortener"]
+#[description = "Usage: pls.give link <link>"]
 pub async fn link(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
     let say_content = if args.is_empty() {
         "Invalid format. The format is \npls.give link `some-long-link`".to_string()
