@@ -24,6 +24,7 @@ use commands::{
     misc::*,
     admin::*,
     help::*,
+    link::*,
 };
 
 
@@ -57,7 +58,7 @@ struct Admin;
 
 #[group]
 #[description = "Miscelenaous commands"]
-#[commands(ping)]
+#[commands(ping, link)]
 struct Misc;
 
 
