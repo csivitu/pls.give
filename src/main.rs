@@ -52,8 +52,18 @@ struct Admin;
 
 #[group]
 #[description = "Miscelenaous commands"]
-#[commands(ping, link, board, paste)]
+#[commands(ping)]
 struct Misc;
+
+#[group]
+#[description = "Collaboration commands"]
+#[commands(board)]
+struct Collaboration;
+
+#[group]
+#[description = "Utility commands"]
+#[commands(link, paste)]
+struct Utility;
 
 #[tokio::main]
 async fn main() {
@@ -81,6 +91,8 @@ async fn main() {
         .configure(|c| c.owners(owners).prefix("pls.give "))
         .help(&HELP)
         .group(&ADMIN_GROUP)
+        .group(&UTILITY_GROUP)
+        .group(&COLLABORATION_GROUP)
         .group(&MISC_GROUP);
 
     let mut client = Client::builder(&token)
