@@ -8,7 +8,7 @@ use uuid::Uuid;
 #[description = "gives link to whiteboard"]
 #[description = "Usage: pls.give board"]
 pub async fn board(ctx: &Context, msg: &Message) -> CommandResult {
-    let say_content = format!("https://witeboard.com/{}.", Uuid::new_v4());
+    let say_content = format!("https://witeboard.com/{}", Uuid::new_v4());
     msg.reply(&ctx.http, say_content).await?;
     Ok(())
 }
