@@ -47,7 +47,7 @@ impl EventHandler for Handler {
 #[owners_only]
 #[prefix = "admin"]
 #[description = "Administration commands which only bot owners are allowed to use"]
-#[commands(quit)]
+#[commands(quit, envs)]
 struct Admin;
 
 #[group]
