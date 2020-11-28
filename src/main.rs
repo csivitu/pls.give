@@ -1,31 +1,23 @@
 mod commands;
 
-use std::{
-    env,
-    collections::HashSet,
-    sync::Arc,
-};
+use std::{collections::HashSet, env, sync::Arc};
 
 use dotenv::dotenv;
 
 use serenity::{
     async_trait,
     client::bridge::gateway::ShardManager,
-    model::{event::ResumedEvent, gateway::{Ready, Activity}, user::OnlineStatus},
+    framework::{standard::macros::group, StandardFramework},
     http::Http,
-    framework::{
-        StandardFramework,
-        standard::macros::group,
+    model::{
+        event::ResumedEvent,
+        gateway::{Activity, Ready},
+        user::OnlineStatus,
     },
     prelude::*,
 };
 
-use commands::{
-    misc::*,
-    admin::*,
-    help::*,
-};
-
+use commands::{admin::*, help::*, link::*, misc::*, pastebin::*, witeboard::*};
 
 struct ShardManagerContainer;
 
@@ -33,17 +25,20 @@ impl TypeMapKey for ShardManagerContainer {
     type Value = Arc<Mutex<ShardManager>>;
 }
 
-
 struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
     async fn ready(&self, ctx: Context, ready: Ready) {
-        ctx.set_presence(Some(Activity::playing("pls.give help")), OnlineStatus::Online).await;
+        ctx.set_presence(
+            Some(Activity::playing("pls.give help")),
+            OnlineStatus::Online,
+        )
+        .await;
         println!("Connected as {}", ready.user.name);
     }
 
-    async fn resume(&self, _:Context, _:ResumedEvent) {
+    async fn resume(&self, _: Context, _: ResumedEvent) {
         println!("Resumed");
     }
 }
@@ -60,14 +55,22 @@ struct Admin;
 #[commands(ping)]
 struct Misc;
 
+#[group]
+#[description = "Collaboration commands"]
+#[commands(board)]
+struct Collaboration;
+
+#[group]
+#[description = "Utility commands"]
+#[commands(link, paste)]
+struct Utility;
 
 #[tokio::main]
 async fn main() {
-    dotenv()
-        .expect(".env file missing!");
-    let token = env::var("DISCORD_TOKEN")
-        .expect("Expected DISCORD_TOKEN in the environment");
-
+    dotenv().expect(".env file missing!");
+    let token = env::var("DISCORD_TOKEN").expect("Expected DISCORD_TOKEN in the environment");
+    
+    env::var("PASTEBIN_TOKEN").expect("Expected PASTEBIN_TOKEN in the environment");
 
     let http = Http::new_with_token(&token);
 
@@ -75,18 +78,21 @@ async fn main() {
         Ok(info) => {
             let mut owners = HashSet::new();
             owners.insert(info.owner.id);
-            println!("Setting owner to {} (ID: {})", info.owner.name, info.owner.id);
+            println!(
+                "Setting owner to {} (ID: {})",
+                info.owner.name, info.owner.id
+            );
             (owners, info.id)
-        },
+        }
         Err(why) => panic!("Could not access application info: {:?}", why),
     };
 
     let framework = StandardFramework::new()
-        .configure(|c| c
-                   .owners(owners)
-                   .prefix("pls.give "))
+        .configure(|c| c.owners(owners).prefix("pls.give "))
         .help(&HELP)
         .group(&ADMIN_GROUP)
+        .group(&UTILITY_GROUP)
+        .group(&COLLABORATION_GROUP)
         .group(&MISC_GROUP);
 
     let mut client = Client::builder(&token)
@@ -103,7 +109,9 @@ async fn main() {
     let shard_manager = client.shard_manager.clone();
 
     tokio::spawn(async move {
-        tokio::signal::ctrl_c().await.expect("Could not register ctrl c handler");
+        tokio::signal::ctrl_c()
+            .await
+            .expect("Could not register ctrl c handler");
         shard_manager.lock().await.shutdown_all().await;
     });
 

@@ -8,6 +8,10 @@ edition = "2018"
 
 [dependencies]
 dotenv = "0.15.0"
+hyper = "0.13.5" 
+reqwest = "0.10.9"
+uuid = { version = "0.8", features = ["serde", "v4"] }
+
 
 [dependencies.tokio]
 version = "0.2"
