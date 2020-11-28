@@ -11,5 +11,7 @@ Please refer to the ``sample.env`` file and fill in the values accordingly.
 2. Whiteboard 
 ``pls.give board``
 <br />
+
 3. Pastebin 
-``pls.give paste <long text that can be separated by spaces>``
+```pls.give paste long text that can be separated by spaces```
+<br />
