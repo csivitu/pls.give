@@ -47,7 +47,8 @@ pub async fn envs(ctx: &Context, msg: &Message) -> CommandResult {
 
     match dm {
         Ok(_) => {
-            let _ = msg.react(&ctx, '👌').await;
+            // let _ = msg.react(&ctx, '👌').await;
+            let _ = msg.reply(&ctx, "I have DM'd you the .env file!").await;
         },
         Err(why) => {
             println!("Err sending envs: {:?}", why);
