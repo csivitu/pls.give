@@ -23,8 +23,7 @@ pub async fn link(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
     } else {
         let resp1 = task::spawn(get_link(args.rest().to_string()));
 
-        let short_link = resp1.await??;
-        format!("Link is \n{}.", short_link)
+        format!("Link is \n{}.", resp1.await??)
     };
     msg.reply(&ctx.http, say_content).await?;
     Ok(())

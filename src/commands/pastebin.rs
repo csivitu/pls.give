@@ -36,8 +36,7 @@ pub async fn paste(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
             pastebin_token.to_string(),
         ));
 
-        let short_link = resp1.await??;
-        format!("Pastebin link is \n{}", short_link)
+        format!("Pastebin link is \n{}", resp1.await??)
     };
     msg.reply(&ctx.http, say_content).await?;
     Ok(())
