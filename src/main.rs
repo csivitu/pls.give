@@ -67,7 +67,10 @@ struct Utility;
 
 #[tokio::main]
 async fn main() {
-    dotenv().expect(".env file missing!");
+    if let Err(_) = dotenv() {
+        println!("Warning ! Cannot find .env file");
+    };
+    
     let token = env::var("DISCORD_TOKEN").expect("Expected DISCORD_TOKEN in the environment");
     
     env::var("PASTEBIN_TOKEN").expect("Expected PASTEBIN_TOKEN in the environment");

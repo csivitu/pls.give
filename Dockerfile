@@ -8,15 +8,16 @@ WORKDIR /app
 
 COPY . .
 
-RUN cargo build --release
+RUN cargo build -j 12 --release
 
 # ------------------------------------------------------------------------------
 # Final Stage
 # ------------------------------------------------------------------------------
 
-FROM alpine:latest
+FROM ubuntu
 
-COPY --from=cargo-build /app/target/release/pls-give /pls-give
+COPY --from=cargo-build /app/target/release/pls-give /app/pls-give
 
-CMD ["/pls-give"]
+RUN apt-get update -y && apt install libssl-dev -y
 
+ENTRYPOINT ["/app/pls-give"]

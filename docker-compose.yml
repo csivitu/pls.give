@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+
+  plsgive:
+    build: .
+    environment: 
+    - DISCORD_TOKEN=${DISCORD_TOKEN}
+    - PASTEBIN_TOKEN=${PASTEBIN_TOKEN}
+    env_file:
+      - test.env
