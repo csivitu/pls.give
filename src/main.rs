@@ -17,7 +17,14 @@ use serenity::{
     prelude::*,
 };
 
-use commands::{admin::*, help::*, link::*, misc::*, pastebin::*, witeboard::*};
+use commands::{
+    admin::*, 
+    help::*, 
+    link::*, 
+    misc::*, 
+    pastebin::*, 
+    witeboard::*,
+};
 
 struct ShardManagerContainer;
 
